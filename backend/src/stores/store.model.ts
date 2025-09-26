@@ -1,5 +1,7 @@
 import { Table, Column, Model, DataType, ForeignKey } from 'sequelize-typescript';
 import { User } from '../users/user.model';
+import { HasMany } from 'sequelize-typescript';
+import { Rating } from '../ratings/rating.model';
 
 @Table({ tableName: 'stores', timestamps: true })
 export class Store extends Model<Store> {
@@ -22,4 +24,7 @@ export class Store extends Model<Store> {
   @ForeignKey(() => User)
   @Column({ type: DataType.UUID, allowNull: true }) // Can be assigned later
   declare ownerId: string;
+
+  @HasMany(() => Rating)
+  declare ratings: Rating[];
 }

@@ -7,6 +7,9 @@ import SignUpPage from './pages/SignUpPage';
 import AdminDashboardPage from './pages/admin/AdminDashboardPage';
 import { AdminRoute } from './components/AdminRoute';
 import { AuthProvider } from './context/AuthProvider';
+import StoreListPage from './pages/StoreListPage';
+import { OwnerRoute } from './components/OwnerRoute';
+import StoreOwnerDashboardPage from './pages/owner/StoreOwnerDashboardPage';
 
 const App: React.FC = () => {
   return (
@@ -18,6 +21,11 @@ const App: React.FC = () => {
 
           <Route element={<ProtectedRoute />}>
             <Route path="/dashboard" element={<DashboardPage/>} />
+            <Route path="/stores" element={<StoreListPage />} />
+          </Route>
+
+          <Route element={<OwnerRoute />}>
+            <Route path="/owner/dashboard" element={<StoreOwnerDashboardPage />} />
           </Route>
 
           <Route element={<AdminRoute />}>

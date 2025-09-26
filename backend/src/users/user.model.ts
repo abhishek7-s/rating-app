@@ -1,4 +1,6 @@
 import { Table, Column, Model, DataType, Scopes } from 'sequelize-typescript';
+import { HasMany } from 'sequelize-typescript';
+import { Rating } from '../ratings/rating.model';
 
 export enum UserRole {
   SYSTEM_ADMIN = 'system_admin',
@@ -39,4 +41,7 @@ export class User extends Model<User> {
     allowNull: false,
   })
   declare role: UserRole;
+
+  @HasMany(() => Rating)
+  declare ratings: Rating[];
 }

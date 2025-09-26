@@ -4,6 +4,8 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { StoresModule } from './stores/stores.module';
+import { RatingsModule } from './ratings/rating.module';
+import { OwnerModule } from './owner/owner.module';
 
 @Module({
   imports: [
@@ -30,6 +32,8 @@ import { StoresModule } from './stores/stores.module';
     AuthModule,
     UsersModule,
     StoresModule,
+    RatingsModule,
+    OwnerModule,
   ],
   controllers: [],
   providers: [],
