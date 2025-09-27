@@ -5,6 +5,7 @@ export interface User {
   id: string;
   email: string;
   name: string;
+  address?: string;
   role: 'system_admin' | 'normal_user' | 'store_owner';
 }
 

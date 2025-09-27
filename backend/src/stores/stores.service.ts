@@ -62,4 +62,25 @@ export class StoresService {
     store.ownerId = ownerId;
     return store.save();
   }
+
+  async findAllForAdmin(): Promise<any[]> {
+    return this.storeModel.findAll({
+      attributes: {
+        include: [
+          [
+            this.sequelize.fn('AVG', this.sequelize.col('ratings.rating')),
+            'averageRating',
+          ],
+        ],
+      },
+      include: [{
+        model: this.sequelize.models.Rating,
+        as: 'ratings',
+        attributes: [],
+      }],
+      group: ['Store.id'],
+      raw: true,
+    });
+  }
+
 }
