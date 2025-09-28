@@ -1,6 +1,5 @@
 import { createContext } from 'react';
 
-// Defines the shape of the User object
 export interface User {
   id: string;
   email: string;
@@ -9,7 +8,7 @@ export interface User {
   role: 'system_admin' | 'normal_user' | 'store_owner';
 }
 
-// Defines the shape of the context's value
+
 export interface AuthContextType {
   token: string | null;
   user: User | null;

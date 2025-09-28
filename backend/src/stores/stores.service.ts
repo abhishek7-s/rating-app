@@ -1,5 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-// 1. Make sure 'InjectConnection' is imported from '@nestjs/sequelize'
+import { Injectable, NotFoundException } from '@nestjs/common'; 
 import { InjectModel, InjectConnection } from '@nestjs/sequelize';
 import { Sequelize } from 'sequelize-typescript';
 import { Store } from './store.model';
@@ -7,8 +6,7 @@ import { CreateStoreDto } from './dto/create-store.dto';
 import { Op } from 'sequelize';
 
 @Injectable()
-export class StoresService {
-  // 2. Make sure the @InjectConnection() decorator is right before 'private sequelize'
+export class StoresService { 
   constructor(
     @InjectModel(Store)
     private storeModel: typeof Store,
@@ -25,21 +23,43 @@ export class StoresService {
     return this.storeModel.findAll();
   }
   
-  async findAllWithRatingsForUser(
-    userId: string,
-    filters: { name?: string; address?: string },
-  ): Promise<any[]> {
+  async findAllWithRatingsForUser(userId: string, filters: { name?: string; address?: string }): Promise<any[]> {
     const where: any = {};
     if (filters.name) {
-      where.name = { [Op.iLike]: `%${filters.name}%` }; // Case-insensitive search
+      where.name = { [Op.iLike]: `%${filters.name}%` };
     }
-    // Add this block to handle the address filter
     if (filters.address) {
       where.address = { [Op.iLike]: `%${filters.address}%` };
     }
     
     return this.storeModel.findAll({
       where,
+      attributes: {
+        include: [
+          [
+            this.sequelize.fn('AVG', this.sequelize.col('ratings.rating')),
+            'averageRating',
+          ],
+          [
+            this.sequelize.literal(`(
+              SELECT rating FROM ratings AS user_rating
+              WHERE
+                user_rating."storeId" = "Store"."id"
+                AND
+                user_rating."userId" = '${userId}'
+            )`),
+            'userRating',
+          ],
+        ],
+      },
+      include: [{
+        model: this.sequelize.models.Rating,
+        as: 'ratings',
+        attributes: [],
+        required: false,  
+      }],
+      group: ['Store.id'],
+      raw: true,
     });
   }
 

@@ -7,7 +7,7 @@ import { Rating } from '../ratings/rating.model';
 
 @Module({
   imports: [
-    SequelizeModule.forFeature([Store, Rating]), // Models used by the service
+    SequelizeModule.forFeature([Store, Rating]),
   ],
   controllers: [OwnerController],
   providers: [OwnerService],

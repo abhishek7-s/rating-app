@@ -10,7 +10,18 @@ export class RatingsService {
   ) {}
 
   async upsert(dto: { userId: string; storeId: string; rating: number }): Promise<Rating> {
-    const [rating] = await this.ratingModel.upsert(dto as any);
-    return rating;
+    const existingRating = await this.ratingModel.findOne({
+      where: {
+        userId: dto.userId,
+        storeId: dto.storeId,
+      },
+    });
+
+    if (existingRating) {
+      existingRating.rating = dto.rating;
+      return existingRating.save();
+    }
+
+    return this.ratingModel.create(dto as any);
   }
 }

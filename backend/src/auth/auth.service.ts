@@ -6,8 +6,6 @@ import { LoginDto } from './dto/login.dto'; // Import DTOs
 import { SignUpDto } from './dto/signup.dto';
 import { UpdatePasswordDto } from './dto/update-password.dto';
 
-// interface LoginDto { email; password }
-// interface SignUpDto { name; email; password; address }
 
 @Injectable()
 export class AuthService {
@@ -19,7 +17,7 @@ export class AuthService {
   async validateUser(email: string, pass: string): Promise<any> {
     const user = await this.usersService.findOneByEmail(email);
     if (user && (await bcrypt.compare(pass, user.password))) {
-      const { password, ...result } = user.get(); // get() returns plain object
+      const { password, ...result } = user.get();
       return result;
     }
     return null;
@@ -46,13 +44,12 @@ export class AuthService {
       ...signUpDto,
       password: hashedPassword,
     });
-    // You can also log the user in immediately after signup
     const { password, ...result } = user.get();
     return result;
   }
 
   async updatePassword(userId: string, updatePasswordDto: UpdatePasswordDto) {
-    const user = await this.usersService.findOneById(userId); // You'll need to create this service method
+    const user = await this.usersService.findOneById(userId);
     if (!user) {
       throw new UnauthorizedException();
     }

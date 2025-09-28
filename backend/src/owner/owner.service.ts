@@ -39,7 +39,6 @@ export class OwnerService {
     });
 
     return {
-      // If avgRatingResult is null, default to 0. Otherwise, format the number.
       averageRating: avgRatingResult && avgRatingResult['averageRating']
         ? Number(avgRatingResult['averageRating']).toFixed(2)
         : '0.00',
