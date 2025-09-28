@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Request, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Request, UseGuards, Query } from '@nestjs/common';
 import { StoresService } from './stores/stores.service';
 import { RatingsService } from './ratings/ratings.service';
 import { CreateRatingDto } from './ratings/dto/create-rating.dto'; // You'll need to create this DTO
@@ -13,9 +13,13 @@ export class StoresController {
   ) {}
 
   @Get()
-  async findAllForUser(@Request() req) {
-    // This service method needs to be created
-    return this.storesService.findAllWithRatingsForUser(req.user.id);
+  async findAllForUser(
+    @Request() req,
+    @Query('name') name?: string,
+    @Query('address') address?: string, // Add this line
+  ) {
+    // Pass all filters to the service
+    return this.storesService.findAllWithRatingsForUser(req.user.id, { name, address });
   }
 
   @Post(':storeId/ratings')
